@@ -15,7 +15,7 @@ public class SeguridadConfig {
     @Bean
     SecurityFilterChain seguridad(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(auth -> auth
-            .requestMatchers(org.springframework.http.HttpMethod.GET, "/", "/catalogo", "/orientadores/*", "/css/**", "/error").permitAll()
+            .requestMatchers(org.springframework.http.HttpMethod.GET, "/", "/catalogo", "/orientadores/*", "/css/**", "/img/**", "/error").permitAll()
             .anyRequest().denyAll()).build();
     }
 }

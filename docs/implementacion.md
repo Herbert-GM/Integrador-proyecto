@@ -52,3 +52,7 @@ Git guarda versiones locales; el push publica en GitHub. Distinguir entre implem
 - Revisión en navegador: inicio, catálogo con dos perfiles, filtro de programación con un perfil y detalle de Ana. También se comprobó visualmente el inicio en una ventana estrecha; aún no se declara una auditoría completa de accesibilidad o tamaños.
 - Se creó una copia sincronizada en `C:\Users\Usuario\Documents\ChatGPT\Integrador\ensename` para preservar el índice de la carpeta anterior. Esta es la carpeta activa para próximas sesiones. El historial remoto de APF3 y sus documentos se conservan completos.
 - La entrega se prepara como un commit sobre `main`; la confirmación de publicación se verifica con GitHub al terminar, fuera de este registro.
+
+## Mejora visual basada en Figma
+
+Se adapta la dirección visual del prototipo APF2 al inicio, catálogo y detalle: azul principal, acentos menta, cabecera con logotipo original, ilustración y tarjetas. Los perfiles siguen siendo los datos ficticios de la implementación. Registro y acceso siguen pendientes. Validación: 18 pruebas aprobadas y revisión visual del catálogo en navegador.
