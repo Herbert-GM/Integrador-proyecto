@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ENSEÑA-ME · Aprende entre estudiantes</title><link rel="stylesheet" th:href="@{/css/estilos.css}"></head>
+<body>
+<header><a class="marca" th:href="@{/}">ENSEÑA-ME<span>Aprendemos entre estudiantes</span></a><nav aria-label="Principal"><a th:href="@{/catalogo}">Explorar orientadores</a></nav></header>
+<main>
+  <p class="aviso">Demostración académica · Perfiles ficticios · Sin cobros</p>
+  <section class="portada"><p class="etiqueta">UN PUNTO DE ENCUENTRO PARA APRENDER</p><h1>Ese tema que te cuesta,<br>alguien puede explicártelo.</h1><p class="intro">Encuentra estudiantes que comparten sus conocimientos. Explora sus especialidades y conoce cómo pueden orientarte.</p><a class="boton" th:href="@{/catalogo}">Encontrar orientación <span aria-hidden="true">→</span></a></section>
+  <section class="pasos" aria-label="Cómo funciona"><article><span class="numero">01</span><h2>Elige un tema</h2><p>Busca orientación en programación, matemáticas o bases de datos.</p></article><article><span class="numero">02</span><h2>Conoce el perfil</h2><p>Revisa qué conocimientos ofrece cada orientador.</p></article><article><span class="numero">03</span><h2>Conversa y coordina</h2><p>El contacto será por WhatsApp. En esta demostración está desactivado.</p></article></section>
+  <aside class="nota"><h2>¿También quieres compartir lo que sabes?</h2><p>Una misma cuenta podrá buscar ayuda y ofrecer orientación. La publicación requerirá un perfil completo y una suscripción mensual simulada. El registro estará disponible en una próxima entrega.</p></aside>
+</main><footer>ENSEÑA-ME · Proyecto académico · La información de los perfiles no acredita competencias verificadas.</footer>
+</body></html>
