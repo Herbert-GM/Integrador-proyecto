@@ -1,60 +1,56 @@
 # ENSEÑA-ME
 
-Plataforma de orientación académica entre estudiantes: descubrir orientadores por especialidad, consultar perfiles y, en la versión completa, contactarlos por WhatsApp. Una misma cuenta podrá buscar ayuda y ofrecer orientación.
+Plataforma de orientación académica entre estudiantes. Una misma cuenta puede buscar ayuda y ofrecer orientación. El catálogo es público; un perfil aparece si está completo, su propietario lo publica y tiene una suscripción mensual simulada vigente.
 
-Proyecto académico de Herbert Alain Gadea Mendoza. El autor confirma el visto bueno del docente. Los antecedentes académicos se conservan sin reescribirlos.
+## Estado al 14 de noviembre de 2026
 
-## Estado real
+Implementados: registro, inicio y cierre de sesión, edición exclusiva del perfil propio, especialidades, activación mensual sin cobro, estado de suscripción, catálogo, filtro y detalle protegido por visibilidad. Persistencia en el esquema SQL Server existente mediante Spring JDBC y consultas parametrizadas. Las contraseñas usan BCrypt. Se conservan las protecciones CSRF y las cabeceras de seguridad.
 
-Primera entrega implementada: inicio, catálogo público, filtro, detalle y reglas de suscripción y publicación con pruebas automatizadas. Los perfiles se guardan en memoria y se regeneran al arrancar.
+Pendiente de la siguiente entrega: contacto real por WhatsApp, despliegue, comprobaciones HTTPS y seguridad del alojamiento. No se atribuye un porcentaje académico por contar archivos o pruebas.
 
-Pendientes: registro, acceso, edición del perfil, activación desde pantalla, persistencia SQL Server y contacto real. No se atribuye un porcentaje académico al avance.
+## Iniciar con Windows y SQL Server
 
-## Ejecutar
-
-Requisito: JDK 21 y JAVA_HOME apuntando al JDK. Maven Wrapper descarga Maven y las dependencias oficiales en el primer uso.
+Requisitos: JDK 21 x64, SQL Server Express, base Ensename con el esquema de `docs/u2-diseno/base-de-datos/sql/Ensename_BD_Completa.sql`, especialidades y cuenta Windows autorizada con permisos limitados.
 
 ```powershell
-.\mvnw.cmd test
+.\scripts\Preparar-Local.ps1
+.\scripts\Comprobar-SqlServer.ps1
+.\scripts\Iniciar-Local.ps1
+```
+
+Abrir http://localhost:8080/registro para crear una cuenta. La contraseña debe tener de 12 a 64 caracteres y como máximo 72 bytes UTF-8. Después de ingresar, completar el perfil, activar la suscripción simulada y habilitar la publicación. Para otro puerto: `.\scripts\Iniciar-Local.ps1 -Puerto 8095`.
+
+La aplicación se conecta mediante la cuenta Windows del proceso. No necesita ni almacena la contraseña administrativa de SQL Server. El controlador nativo oficial se descarga a `.local/native`, excluido de Git. Los scripts no cambian políticas globales de Windows ni el PATH permanente.
+
+## Demostración sin base de datos
+
+```powershell
 .\mvnw.cmd spring-boot:run
 ```
 
-Abrir http://localhost:8080. Solo escucha en la computadora local. Para otro puerto, definir `$env:PORT='8081'` antes de ejecutar. Detener con Ctrl+C.
+El perfil predeterminado `demo` mantiene cinco perfiles ficticios en memoria; registro y gestión privada requieren `sqlserver`. No combinar ambos perfiles. La demo permite mostrar perfiles visibles, vencidos, incompletos y ocultos sin usar teléfonos reales.
 
-En macOS/Linux: `sh mvnw test` y `sh mvnw spring-boot:run`.
+## Pruebas
 
 ```powershell
-.\mvnw.cmd clean verify
-java -jar target/ensename-0.1.0-SNAPSHOT.jar
+.\mvnw.cmd verify
 ```
 
-El perfil predeterminado es `demo`. Aún no existe modo de producción: cambiar a otro perfil sin implementar otro repositorio impide el arranque.
+La suite habitual usa H2 aislada para cuentas y MockMvc para los recorridos web. La prueba SQL Server real es optativa y revierte todas sus escrituras al finalizar. Tras preparar el controlador:
 
-## Demostración
+```powershell
+$env:PATH=(Join-Path (Get-Location) '.local\native')+';'+$env:PATH
+$env:RUN_SQLSERVER_TESTS='true'
+.\mvnw.cmd verify
+```
 
-| ID | Caso | Resultado |
-| --- | --- | --- |
-| 1 | Ana, programación, suscripción vigente | Visible |
-| 2 | Luis, matemáticas, suscripción vigente | Visible |
-| 3 | Suscripción vencida | Oculto |
-| 4 | Oculto voluntariamente con suscripción vigente | Oculto |
-| 5 | Perfil incompleto | Oculto |
+## Despliegue y continuidad
 
-Los casos ocultos tampoco se exponen por URL directa. Son perfiles ficticios, todavía no cuentas autenticables. Los números de prueba no se muestran ni generan enlaces externos. Los datos se restablecen al reiniciar; las suscripciones vigentes de ejemplo empiezan en ese arranque.
+Usar los perfiles `sqlserver,produccion` y proporcionar DB_URL, DB_USERNAME y DB_PASSWORD mediante el alojamiento. DB_URL debe requerir cifrado y validar el certificado (encrypt=true;trustServerCertificate=false). La autenticación final depende del proveedor; el código de cuentas y las pantallas no cambian. Producción exige HTTPS para las cookies seguras. No se ha desplegado todavía.
 
-## Organización
+- [Objetivo y funciones](docs/producto.md)
+- [Entregas y continuidad](docs/implementacion.md)
+- [Conexión y permisos](docs/conexion.md)
+- [Evidencia de seguridad](docs/seguridad.md)
 
-- `src/main/java/pe/edu/utp/ensename`: controladores, servicios, modelos, repositorio y configuración.
-- `src/main/resources`: vistas Thymeleaf y estilos locales sin CDN.
-- `src/test/java`: pruebas de negocio e integración web.
-- [Objetivo y funciones](docs/producto.md): decisiones vigentes y criterios de aceptación.
-- [Entregas y continuidad](docs/implementacion.md): pendientes y cierre de sesiones con Git.
-- `docs/u1-planificacion`, `docs/u2-diseno`, `docs/u3-arquitectura`: antecedentes conservados.
-
-Un único proyecto Maven con capas MVC es suficiente para el alcance individual y permite cambiar el repositorio demo por SQL Server.
-
-Tecnologías actuales: Java 21, Spring Boot 3.5.16, Spring MVC, Thymeleaf, Spring Security, JUnit y Maven. Logback llega con Spring Boot. JPA, SQL Server y Bootstrap 5 quedan pendientes; no se declaran integrados.
-
-## Git
-
-Repositorio: https://github.com/Herbert-GM/Integrador-proyecto. La carpeta activa es `C:\Users\Usuario\Documents\ChatGPT\Integrador\ensename`, clonada del historial publicado de APF3. La carpeta anterior de entregables se conserva como antecedente. No subir contraseñas, configuraciones locales, dependencias descargadas ni `target`.
+Repositorio: https://github.com/Herbert-GM/Integrador-proyecto. Carpeta activa: C:\Users\Usuario\Documents\ChatGPT\Integrador\ensename. Los antecedentes APF1–APF3 se conservan completos.

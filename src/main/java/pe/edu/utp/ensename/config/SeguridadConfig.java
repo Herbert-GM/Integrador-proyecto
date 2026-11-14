@@ -13,10 +13,26 @@ public class SeguridadConfig {
     Clock clock() { return Clock.system(Suscripcion.LIMA); }
 
     @Bean
-    SecurityFilterChain seguridad(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(auth -> auth
+    SecurityFilterChain seguridad(HttpSecurity http, org.springframework.core.env.Environment environment) throws Exception {
+        boolean cuentas = environment.acceptsProfiles(org.springframework.core.env.Profiles.of("sqlserver"));
+        http.authorizeHttpRequests(auth -> {
+            if (cuentas) {
+                auth.requestMatchers("/ingresar", "/registro").permitAll()
+                    .requestMatchers("/mi-perfil", "/suscripcion", "/suscripcion/activar").authenticated();
+            }
+            auth
             .requestMatchers(org.springframework.http.HttpMethod.GET, "/", "/catalogo", "/orientadores/*", "/css/**", "/img/**", "/error").permitAll()
-            .anyRequest().denyAll())
+            .anyRequest().denyAll();
+        });
+        if (cuentas) {
+            http.formLogin(login -> login.loginPage("/ingresar").usernameParameter("correo")
+                    .passwordParameter("clave").defaultSuccessUrl("/mi-perfil", true)
+                    .failureUrl("/ingresar?error"))
+                .logout(logout -> logout.logoutUrl("/salir").logoutSuccessUrl("/ingresar?saliste")
+                    .invalidateHttpSession(true).deleteCookies("JSESSIONID"))
+                .sessionManagement(session -> session.sessionFixation(fixation -> fixation.migrateSession()));
+        }
+        return http
             .headers(headers -> headers
                 .contentSecurityPolicy(csp -> csp.policyDirectives(
                     "default-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; "

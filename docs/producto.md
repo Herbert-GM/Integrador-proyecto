@@ -52,3 +52,8 @@ Un proyecto Java 21 con MVC, servicios y repositorios. El repositorio de demostr
 ## Fuentes
 
 Sílabo e informe final aportados por el autor en la carpeta raíz ENSEÑA-ME. El sílabo define etapas académicas; el informe define las funciones. Las decisiones posteriores del autor actualizan el estado histórico del informe.
+
+
+## Implementación vigente al 14 de noviembre
+
+El modo sqlserver implementa persistencia con Spring JDBC sobre el esquema original, registro/acceso/salida, perfil propio y suscripción desde pantalla. Se conserva la interfaz de repositorio y el modo demo. La elección inicial de JPA se actualiza a JDBC para reutilizar consultas, transacciones y tablas existentes sin generación automática de esquema. El acceso Windows local está comprobado con permisos limitados.

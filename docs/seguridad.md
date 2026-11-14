@@ -33,3 +33,14 @@ No se declara alcanzado el 70% académico. Faltan persistencia, cuentas, edició
 SQL Server Express está activo. La base `Ensename` está ONLINE, pero `HAS_DBACCESS` devuelve 0 para la cuenta Windows actual, que tampoco es administradora del servidor. No se cambiaron datos, permisos ni propietarios. Se necesita resolver el acceso autorizado antes de integrar la persistencia y las cuentas.
 
 HTTPS, cookies seguras bajo HTTPS y pruebas en el alojamiento se comprobarán durante el despliegue de semana 15. Este registro no constituye una auditoría exhaustiva ni una certificación de seguridad.
+
+
+## Actualización de cuentas y persistencia
+
+Se resuelve el acceso mediante la cuenta Windows limitada autorizada por el autor. Se implementan registro transaccional, contraseña BCrypt (coste 12), correo único normalizado, acceso con errores genéricos, cierre de sesión con invalidación, protección de fijación de sesión, validación del perfil y selección de propietario a partir de la sesión. Los formularios no aceptan un identificador de propietario como autoridad. CSRF protege registro, acceso, edición, activación y salida.
+
+Se añaden pruebas con H2 aislada para registro/duplicados, hash de contraseña, credenciales inválidas, cuenta deshabilitada, acceso anónimo, edición con identificador ajeno, activación ajena, validación y escape de texto con etiquetas script. La prueba SQL Server real comprueba conexión Windows, registro, actualización, activación idempotente, ocultamiento y vencimiento; todas sus escrituras se revierten. Las tablas y las restricciones SQL Server reales no se sustituyen por las pruebas H2.
+
+El bloqueo de la sección anterior y las funciones de cuentas pendientes quedan resueltos en esta actualización. Aún no se ha realizado una auditoría externa, un análisis completo de dependencias ni una prueba de carga/concurrencia bajo múltiples procesos. El bloqueo transaccional de SQL Server serializa las activaciones de un mismo propietario; no se declara ejecutada una prueba de carga concurrente. Limitación de intentos, recuperación de contraseña y verificación de correo quedan pendientes antes de abrir un registro público en Internet. Los controles de HTTPS y del alojamiento se realizarán en semana 15.
+
+Resultado final: 36 pruebas ejecutadas, sin fallos, errores ni omisiones; incluye nueve pruebas de cuentas y una prueba real de SQL Server con rollback. Maven verify generó el JAR. Esta entrega completa los controles locales acordados; la publicación en Internet requiere los pendientes de despliegue indicados arriba.

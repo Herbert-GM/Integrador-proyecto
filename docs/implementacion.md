@@ -5,10 +5,10 @@
 | Entrega | Trabajo | Estado |
 | --- | --- | --- |
 | E01 | Proyecto ejecutable, catálogo demo, reglas de suscripción y publicación, pruebas | Implementado; resultados de validación al cierre de la sesión |
-| E02 | JPA/SQL Server, variables de entorno, esquema reproducible y datos de ejemplo aislados | Pendiente |
-| E03 | Registro, autenticación, cierre de sesión y validaciones | Pendiente |
-| E04 | Edición del perfil propio, especialidades, publicar y ocultar | Pendiente |
-| E05 | Activación desde pantalla, estado de suscripción y control de concurrencia | Pendiente |
+| E02 | SQL Server mediante JDBC, variables de entorno y reutilización del esquema existente | Implementado |
+| E03 | Registro, autenticación, cierre de sesión y validaciones | Implementado |
+| E04 | Edición del perfil propio, especialidades, publicar y ocultar | Implementado |
+| E05 | Activación desde pantalla y estado de suscripción; bloqueo SQL por propietario | Implementado; carga concurrente pendiente |
 | E06 | Contacto WhatsApp autorizado, recorrido integrado y adaptación visual | Pendiente |
 
 Cada entrega incluye sus pruebas. La activación reutilizará las reglas probadas y deberá impedir periodos duplicados ante solicitudes concurrentes. Se integrará SQL Server antes de crear cuentas reales.
@@ -60,3 +60,14 @@ Se adapta la dirección visual del prototipo APF2 al inicio, catálogo y detalle
 ## Sesión 2026-11-14 — seguridad
 
 Se añaden cabeceras de protección y ocho pruebas de seguridad web. Maven verify: 26 pruebas aprobadas, sin errores ni omisiones; JAR generado. Evidencia y límites en `docs/seguridad.md`. La semana 14 sigue pendiente de cuentas y pruebas de propiedad. SQL Server Express funciona, pero la identidad de Windows no tiene acceso a Ensename; se solicitó al autor el método de conexión autorizado. No se modificó la base de datos.
+
+
+## Actualización 2026-11-14 — cuentas y SQL Server
+
+Se implementan E02 a E05: acceso Windows limitado a Ensename, persistencia Spring JDBC sobre las tablas existentes, registro, acceso y salida, perfil propio, especialidades y suscripción mensual desde pantalla. Se eligió JDBC para reutilizar el esquema SQL recibido sin generar tablas ni conceder permisos DDL a la aplicación; el plan inicial mencionaba JPA y queda actualizado con esta decisión. El controlador de autenticación nativa queda fuera de Git.
+
+El autor autorizó los permisos limitados de la cuenta Windows. No se guarda ninguna contraseña administrativa. Se mantienen modo demo y perfil sqlserver; produccion externaliza conexión, activa cookies seguras y se usará en semana 15. No se ha realizado despliegue.
+
+El impedimento de acceso descrito al inicio de esta sesión queda resuelto. Próximo trabajo: contacto WhatsApp autorizado y preparación del despliegue, incluida la limitación de intentos de acceso y la revisión de secretos/configuración del alojamiento. No se declara un porcentaje académico sin evaluación del docente.
+
+Validación final de esta entrega: Maven verify con Java 21, 36 pruebas ejecutadas y aprobadas sin omisiones, incluida SQL Server real con rollback; JAR generado. Registro e ingreso revisados visualmente en navegador.
