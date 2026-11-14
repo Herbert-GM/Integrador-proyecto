@@ -56,3 +56,7 @@ Git guarda versiones locales; el push publica en GitHub. Distinguir entre implem
 ## Mejora visual basada en Figma
 
 Se adapta la dirección visual del prototipo APF2 al inicio, catálogo y detalle: azul principal, acentos menta, cabecera con logotipo original, ilustración y tarjetas. Los perfiles siguen siendo los datos ficticios de la implementación. Registro y acceso siguen pendientes. Validación: 18 pruebas aprobadas y revisión visual del catálogo en navegador.
+
+## Sesión 2026-11-14 — seguridad
+
+Se añaden cabeceras de protección y ocho pruebas de seguridad web. Maven verify: 26 pruebas aprobadas, sin errores ni omisiones; JAR generado. Evidencia y límites en `docs/seguridad.md`. La semana 14 sigue pendiente de cuentas y pruebas de propiedad. SQL Server Express funciona, pero la identidad de Windows no tiene acceso a Ensename; se solicitó al autor el método de conexión autorizado. No se modificó la base de datos.
