@@ -57,3 +57,8 @@ Sílabo e informe final aportados por el autor en la carpeta raíz ENSEÑA-ME. E
 ## Implementación vigente al 14 de noviembre
 
 El modo sqlserver implementa persistencia con Spring JDBC sobre el esquema original, registro/acceso/salida, perfil propio y suscripción desde pantalla. Se conserva la interfaz de repositorio y el modo demo. La elección inicial de JPA se actualiza a JDBC para reutilizar consultas, transacciones y tablas existentes sin generación automática de esquema. El acceso Windows local está comprobado con permisos limitados.
+
+
+## Actualización 2026-11-18 — PostgreSQL
+
+El autor autoriza PostgreSQL para el despliegue sin cambiar las funciones de ENSEÑA-ME. Se añade el perfil postgres y se conserva sqlserver; el repositorio comparte consultas y adapta el bloqueo de propietario a cada motor. No se copiaron datos personales de la base local.

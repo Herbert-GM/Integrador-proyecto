@@ -12,6 +12,11 @@ public class SaludController {
     private final ObjectProvider<JdbcTemplate> jdbc;
     public SaludController(ObjectProvider<JdbcTemplate> jdbc) { this.jdbc = jdbc; }
 
+    @GetMapping("/vivo")
+    Map<String,String> vivo() {
+        return Map.of("estado", "disponible");
+    }
+
     @GetMapping("/salud")
     ResponseEntity<Map<String,String>> salud() {
         try {

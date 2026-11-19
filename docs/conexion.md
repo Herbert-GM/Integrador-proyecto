@@ -41,3 +41,8 @@ Activar `sqlserver,produccion` y proporcionar DB_URL, DB_USERNAME y DB_PASSWORD 
 El perfil produccion exige cookies seguras, por lo que requiere HTTPS y una configuración correcta del proxy del proveedor. La cuenta de migración debe ser distinta de la identidad de ejecución. El despliegue aún no se ha realizado.
 
 Referencia: [conexión y autenticación integrada con Microsoft JDBC](https://learn.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver17).
+
+
+## Actualización 2026-11-18 — PostgreSQL
+
+El autor autorizó PostgreSQL para Render/Neon. La conexión Windows descrita aquí sigue disponible para SQL Server local. La guía vigente de nube es [Render y Neon](render-neon.md).

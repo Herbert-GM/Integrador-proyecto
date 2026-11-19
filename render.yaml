@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: ensename
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /vivo
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: postgres,produccion
+      - key: SERVER_ADDRESS
+        value: 0.0.0.0
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false

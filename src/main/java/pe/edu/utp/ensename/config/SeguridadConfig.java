@@ -14,7 +14,7 @@ public class SeguridadConfig {
 
     @Bean
     SecurityFilterChain seguridad(HttpSecurity http, org.springframework.core.env.Environment environment) throws Exception {
-        boolean cuentas = environment.acceptsProfiles(org.springframework.core.env.Profiles.of("sqlserver"));
+        boolean cuentas = environment.acceptsProfiles(org.springframework.core.env.Profiles.of("sqlserver", "postgres"));
         if (environment.acceptsProfiles(org.springframework.core.env.Profiles.of("produccion"))) {
             http.redirectToHttps(org.springframework.security.config.Customizer.withDefaults());
         }
@@ -24,7 +24,7 @@ public class SeguridadConfig {
                     .requestMatchers("/mi-perfil", "/suscripcion", "/suscripcion/activar").authenticated();
             }
             auth
-            .requestMatchers(org.springframework.http.HttpMethod.GET, "/", "/salud", "/catalogo", "/orientadores/*", "/orientadores/*/contacto", "/orientadores/*/whatsapp", "/css/**", "/img/**", "/error").permitAll()
+            .requestMatchers(org.springframework.http.HttpMethod.GET, "/", "/salud", "/vivo", "/catalogo", "/orientadores/*", "/orientadores/*/contacto", "/orientadores/*/whatsapp", "/css/**", "/img/**", "/error").permitAll()
             .anyRequest().denyAll();
         });
         if (cuentas) {

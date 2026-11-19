@@ -52,7 +52,7 @@ class CuentasSeguridadTests {
     @Test void accesoIncorrectoYCuentaDeshabilitadaSeRechazan() throws Exception {
         mvc.perform(post("/ingresar").with(csrf()).param("correo",correo).param("clave","incorrecta"))
             .andExpect(unauthenticated()).andExpect(redirectedUrl("/ingresar?error"));
-        jdbc.update("UPDATE dbo.Usuario SET habilitado=0 WHERE correo=?",correo);
+        jdbc.update("UPDATE dbo.Usuario SET habilitado=? WHERE correo=?",false,correo);
         mvc.perform(post("/ingresar").with(csrf()).param("correo",correo).param("clave",CLAVE))
             .andExpect(unauthenticated()).andExpect(redirectedUrl("/ingresar?error"));
     }

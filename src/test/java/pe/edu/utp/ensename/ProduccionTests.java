@@ -16,6 +16,24 @@ class ProduccionTests {
     @Test void admiteConfiguracionCifradaExterna() {
         assertThatCode(() -> ConfiguracionProduccion.validar(valida())).doesNotThrowAnyException();
     }
+    private MockEnvironment postgres(String parametros) {
+        var e = valida(); e.setActiveProfiles("postgres", "produccion");
+        return e.withProperty("DB_URL", "jdbc:postgresql://prueba.neon.tech/ensename?" + parametros);
+    }
+    @Test void postgresValidaCertificadoYHost() {
+        var e = postgres("sslmode=verify-full&sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory");
+        assertThatCode(() -> ConfiguracionProduccion.validar(e)).doesNotThrowAnyException();
+        for (String opciones : new String[]{"sslmode=require", "sslmode=disable",
+                "sslmode=verify-full&sslfactory=org.postgresql.ssl.NonValidatingFactory",
+                "sslmode=verify-full&sslmode=disable&sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory",
+                "sslmode=verify-full&sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory&password=prueba"}) {
+            assertThatIllegalStateException().isThrownBy(() -> ConfiguracionProduccion.validar(postgres(opciones)));
+        }
+    }
+    @Test void noPermiteDosMotoresALaVez() {
+        var e=valida();e.setActiveProfiles("sqlserver", "postgres", "produccion");
+        assertThatIllegalStateException().isThrownBy(() -> ConfiguracionProduccion.validar(e));
+    }
 
     @Test void rechazaDemoCredencialesAdministrativasYCertificadoSinValidar() {
         var demo = valida(); demo.setActiveProfiles("demo", "sqlserver", "produccion");

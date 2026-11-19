@@ -5,5 +5,5 @@ import org.springframework.core.env.*;
 public class EstadoInterfaz {
  private final Environment environment;
  public EstadoInterfaz(Environment environment){this.environment=environment;}
- @ModelAttribute("cuentasDisponibles") public boolean cuentas(){return environment.acceptsProfiles(Profiles.of("sqlserver"));}
+ @ModelAttribute("cuentasDisponibles") public boolean cuentas(){return environment.acceptsProfiles(Profiles.of("sqlserver", "postgres"));}
 }

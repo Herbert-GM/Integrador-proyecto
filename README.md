@@ -4,7 +4,7 @@ Plataforma de orientación académica entre estudiantes. Una misma cuenta puede 
 
 ## Estado al 18 de noviembre de 2026
 
-Implementados: registro, inicio y cierre de sesión, edición exclusiva del perfil propio, especialidades, activación mensual sin cobro, estado de suscripción, catálogo, filtro y detalle protegido por visibilidad. Persistencia en el esquema SQL Server existente mediante Spring JDBC y consultas parametrizadas. Las contraseñas usan BCrypt. Se conservan las protecciones CSRF y las cabeceras de seguridad.
+Implementados: registro, inicio y cierre de sesión, edición exclusiva del perfil propio, especialidades, activación mensual sin cobro, estado de suscripción, catálogo, filtro y detalle protegido por visibilidad. Persistencia en PostgreSQL para el despliegue y compatibilidad con SQL Server local mediante Spring JDBC y consultas parametrizadas. Las contraseñas usan BCrypt. Se conservan las protecciones CSRF y las cabeceras de seguridad.
 
 También implementados: aviso y salida a WhatsApp con comprobación de visibilidad, límites de ingreso/registro, endpoint /salud y validación de configuración segura en producción. Las pruebas verifican el destino de WhatsApp sin enviar mensajes.
 
@@ -46,7 +46,13 @@ $env:RUN_SQLSERVER_TESTS='true'
 .\mvnw.cmd verify
 ```
 
-## Despliegue y continuidad
+## Despliegue en Render y Neon
+
+Tras el rechazo de la oferta de Azure, el autor autorizó PostgreSQL. La guía vigente es [Render y Neon](docs/render-neon.md). `render.yaml` configura el servicio gratuito y `Dockerfile` compila/prueba en Linux con Java 21. Las cuentas de nube y el dominio público aún están pendientes.
+
+Configurar `postgres,produccion` con DB_URL, DB_USERNAME y DB_PASSWORD en Render. La URL PostgreSQL exige `sslmode=verify-full&sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory`. No copiar las credenciales a Git. El esquema nuevo está en `deploy/postgres/001-esquema.sql`; no se migraron cuentas ni datos personales de SQL Server.
+
+## Alternativa anterior de SQL Server
 
 Usar los perfiles `sqlserver,produccion` y proporcionar DB_URL, DB_USERNAME y DB_PASSWORD mediante el alojamiento. DB_URL debe requerir cifrado y validar el certificado (encrypt=true;trustServerCertificate=false). La autenticación final depende del proveedor; el código de cuentas y las pantallas no cambian. Producción exige HTTPS para las cookies seguras. No se ha desplegado todavía.
 
@@ -64,4 +70,15 @@ Repositorio: https://github.com/Herbert-GM/Integrador-proyecto. Carpeta activa: 
 .\scripts\Preparar-Despliegue.ps1
 ```
 
-Genera `target/despliegue/app.jar`, esquema inicial para una base nueva y variables de ejemplo. El paquete queda también en `target/ensename-despliegue.zip`. Consultar [despliegue en Azure](docs/despliegue.md). La publicación requiere una cuenta activada por el autor; los scripts no crean ni contratan recursos automáticamente.
+Genera `target/despliegue-postgres/app.jar`, esquema inicial para una base nueva, permisos limitados y variables de ejemplo. El paquete queda también en `target/ensename-despliegue-postgres.zip`. Para la alternativa SQL Server usar `-Motor sqlserver`. Consultar [despliegue en Render y Neon](docs/render-neon.md). La publicación requiere una cuenta activada por el autor; los scripts no crean ni contratan recursos automáticamente.
+
+
+## Verificar PostgreSQL real local
+
+```powershell
+.\scripts\Iniciar-PostgresPruebas.ps1
+$env:RUN_POSTGRES_TESTS='true'
+.\mvnw.cmd verify
+```
+
+Utiliza PostgreSQL 18 instalado con una instancia aislada en .local/postgres-test, accesible únicamente en 127.0.0.1:55432. Repite los recorridos web y comprueba activaciones simultáneas. No usar esta configuración de pruebas para un alojamiento.

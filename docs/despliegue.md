@@ -67,3 +67,8 @@ El límite de acceso permite 10 solicitudes de ingreso cada 15 minutos y 5 regis
 La base gratuita puede pausarse. Las conexiones inactivas se liberan en producción para facilitar la pausa, y la primera consulta puede tardar más al reactivarse. `/salud` consulta la base: no programar comprobaciones frecuentes que impidan su pausa y consuman la cuota. Las cuotas gratuitas pueden impedir disponibilidad continua; comprobarlas antes de la sustentación.
 
 Verificación de correo y recuperación de contraseña aún no forman parte de esta entrega. La demostración académica debe comunicar estas limitaciones. El seguimiento de logs, copias y mantenimiento se abordará en las semanas siguientes.
+
+
+## Actualización 2026-11-18 — PostgreSQL
+
+La guía vigente tras la decisión de cambiar a PostgreSQL es [Render y Neon](render-neon.md). Este archivo conserva la alternativa anterior de Azure/SQL Server. No se contrató ni desplegó ningún recurso en Azure.

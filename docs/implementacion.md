@@ -82,3 +82,10 @@ Se prepara el JAR y un paquete con esquema Azure SQL para base nueva, especialid
 Validación final: 45 pruebas aprobadas, sin errores ni omisiones; incluye SQL Server real con rollback, contacto seguro, límites y HTTPS. Se generó el paquete Maven. Los scripts de PowerShell pasan el análisis de sintaxis. La publicación remota del script todavía no se ejecutó porque no existe una cuenta Azure activada.
 
 El autor indicó que no dispone de alojamiento. Se propone Azure for Students, sujeto a elegibilidad, disponibilidad y revisión de costes. La activación personal de la cuenta y la comprobación del dominio público quedan pendientes; semana 15 sigue abierta hasta publicar y comprobar el recorrido.
+
+
+## Actualización 2026-11-18 — PostgreSQL
+
+El autor autorizó cambiar a PostgreSQL tras el rechazo de Azure gratuito. Se adapta el repositorio, perfiles de cuenta y validación de producción; se conserva SQL Server local. Se preparan esquema/permisos de PostgreSQL, Dockerfile y Blueprint Render Free, sin contraseñas ni datos personales. La imagen usa un usuario sin privilegios. Se añade /vivo sin consulta a base para no mantener Neon activo mediante sondeos. La aplicación pública sigue pendiente de cuentas Neon/Render y verificación del dominio HTTPS.
+
+Validación de la adaptación: 59 pruebas aprobadas sin errores ni omisiones con PostgreSQL real, SQL Server real y concurrencia. La imagen Docker se construyó en Linux y pasó sus pruebas sin bases externas (13 pruebas optativas omitidas allí, ejecutadas en la suite local completa). El contenedor final se conectó a un PostgreSQL 18 privado, mostró registro HTTP 200 y /salud disponible. Se comprobó usuario de proceso sin privilegios. Las bases de pruebas no contienen datos reales. Falta comprobar TLS y el recorrido completo en las cuentas reales de Render y Neon.

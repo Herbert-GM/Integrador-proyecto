@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import pe.edu.utp.ensename.repository.CuentaRepository;
 
-@Controller @Profile("sqlserver")
+@Controller @Profile({"sqlserver", "postgres"})
 public class CuentaController {
     private final CuentaRepository repo; private final PasswordEncoder encoder; private final Clock clock;
     public CuentaController(CuentaRepository repo,PasswordEncoder encoder,Clock clock){this.repo=repo;this.encoder=encoder;this.clock=clock;}

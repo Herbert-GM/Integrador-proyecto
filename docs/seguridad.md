@@ -55,3 +55,10 @@ Límites locales: 10 solicitudes de ingreso cada 15 minutos y 5 registros por ho
 Producción rechaza modo demo, usuario sa, credenciales vacías, conexión sin cifrado o confianza en certificado sin validar. Redirige HTTP a HTTPS. /salud consulta la base y no expone errores internos. Las pruebas HTTPS usan un servidor de prueba; no prueban el certificado de un alojamiento que aún no existe.
 
 Suite final: 45 pruebas aprobadas, sin omisiones. Persisten como pendientes la verificación del alojamiento, la recuperación de contraseña y la verificación de correo. Las comprobaciones de salud no deben sondear constantemente una base gratuita que deba pausarse.
+
+
+## Actualización 2026-11-18 — PostgreSQL
+
+Se añade PostgreSQL con TLS y validación del hostname para Neon. El perfil produccion exige exactamente un motor. La edición y activación usan bloqueo por propietario compatible con PostgreSQL y SQL Server. Se repiten las pruebas web sobre PostgreSQL real y se comprueba que dos activaciones simultáneas producen un solo periodo. El esquema PostgreSQL restringe teléfono, correo único y mes calendario en Lima. No se ha verificado todavía una conexión a Neon ni un dominio público.
+
+Validación de la adaptación: 59 pruebas aprobadas sin errores ni omisiones con PostgreSQL real, SQL Server real y concurrencia. La imagen Docker se construyó en Linux y pasó sus pruebas sin bases externas (13 pruebas optativas omitidas allí, ejecutadas en la suite local completa). El contenedor final se conectó a un PostgreSQL 18 privado, mostró registro HTTP 200 y /salud disponible. Se comprobó usuario de proceso sin privilegios. Las bases de pruebas no contienen datos reales. Falta comprobar TLS y el recorrido completo en las cuentas reales de Render y Neon.

@@ -15,7 +15,7 @@ import pe.edu.utp.ensename.model.Orientador;
 import pe.edu.utp.ensename.service.CatalogoService;
 
 @Controller
-@Profile("sqlserver")
+@Profile({"sqlserver", "postgres"})
 public class ContactoController {
     private final CatalogoService catalogo;
 

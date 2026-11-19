@@ -9,10 +9,20 @@ import org.springframework.transaction.annotation.Transactional;
 import pe.edu.utp.ensename.model.*;
 
 @Repository
-@Profile("sqlserver")
+@Profile({"sqlserver", "postgres"})
 public class CuentaRepository implements OrientadorRepository {
     private final JdbcTemplate jdbc;
-    public CuentaRepository(JdbcTemplate jdbc) { this.jdbc=jdbc; }
+    private final boolean postgres;
+    public CuentaRepository(JdbcTemplate jdbc, org.springframework.core.env.Environment environment) {
+        this.jdbc = jdbc;
+        this.postgres = environment.acceptsProfiles(org.springframework.core.env.Profiles.of("postgres"));
+    }
+    private void bloquear(long id) {
+        String sql = postgres
+            ? "SELECT usuario_id FROM dbo.Orientador WHERE usuario_id=? FOR UPDATE"
+            : "SELECT usuario_id FROM dbo.Orientador WITH (UPDLOCK,HOLDLOCK) WHERE usuario_id=?";
+        jdbc.queryForObject(sql, Long.class, id);
+    }
     public record Cuenta(long id,String nombre,String correo,String hash,boolean habilitado) {}
     public Optional<Cuenta> cuenta(String correo) {
         return jdbc.query("SELECT usuario_id,nombre,correo,password_hash,habilitado FROM dbo.Usuario WHERE correo=?",(r,n)->new Cuenta(r.getLong(1),r.getString(2),r.getString(3),r.getString(4),r.getBoolean(5)),correo).stream().findFirst();
@@ -49,6 +59,7 @@ public class CuentaRepository implements OrientadorRepository {
     }
     @Transactional
     public void guardar(long id,String descripcion,String telefono,Set<Integer> especialidades,boolean publicar) {
+        bloquear(id);
         jdbc.update("UPDATE dbo.Orientador SET descripcion=?,whatsapp=?,publicar=?,actualizado_en=CURRENT_TIMESTAMP WHERE usuario_id=?",descripcion,telefono,publicar,id);
         jdbc.update("DELETE FROM dbo.OrientadorEspecialidad WHERE usuario_id=?",id);
         for(int especialidad:especialidades)jdbc.update("INSERT INTO dbo.OrientadorEspecialidad(usuario_id,especialidad_id) VALUES(?,?)",id,especialidad);
@@ -57,9 +68,9 @@ public class CuentaRepository implements OrientadorRepository {
     public Suscripcion activar(long id,Instant ahora) {
         ahora = ahora.truncatedTo(java.time.temporal.ChronoUnit.SECONDS);
         // El bloqueo del propietario serializa activaciones simultáneas de la misma cuenta.
-        jdbc.queryForObject("SELECT usuario_id FROM dbo.Orientador WITH (UPDLOCK,HOLDLOCK) WHERE usuario_id=?",Long.class,id);
+        bloquear(id);
         Suscripcion anterior=suscripcion(id), nueva=Suscripcion.activar(ahora,anterior);
-        if(nueva!=anterior)jdbc.update("INSERT INTO dbo.Suscripcion(usuario_id,inicio,fin,es_simulada) VALUES(?,?,?,1)",id,nueva.inicio().atZone(Suscripcion.LIMA).toOffsetDateTime(),nueva.fin().atZone(Suscripcion.LIMA).toOffsetDateTime());
+        if(nueva!=anterior)jdbc.update("INSERT INTO dbo.Suscripcion(usuario_id,inicio,fin,es_simulada) VALUES(?,?,?,?)",id,nueva.inicio().atZone(Suscripcion.LIMA).toOffsetDateTime(),nueva.fin().atZone(Suscripcion.LIMA).toOffsetDateTime(),true);
         return nueva;
     }
 }
