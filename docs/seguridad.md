@@ -44,3 +44,14 @@ Se añaden pruebas con H2 aislada para registro/duplicados, hash de contraseña,
 El bloqueo de la sección anterior y las funciones de cuentas pendientes quedan resueltos en esta actualización. Aún no se ha realizado una auditoría externa, un análisis completo de dependencias ni una prueba de carga/concurrencia bajo múltiples procesos. El bloqueo transaccional de SQL Server serializa las activaciones de un mismo propietario; no se declara ejecutada una prueba de carga concurrente. Limitación de intentos, recuperación de contraseña y verificación de correo quedan pendientes antes de abrir un registro público en Internet. Los controles de HTTPS y del alojamiento se realizarán en semana 15.
 
 Resultado final: 36 pruebas ejecutadas, sin fallos, errores ni omisiones; incluye nueve pruebas de cuentas y una prueba real de SQL Server con rollback. Maven verify generó el JAR. Esta entrega completa los controles locales acordados; la publicación en Internet requiere los pendientes de despliegue indicados arriba.
+
+
+## Actualización 2026-11-18
+
+Contacto con comprobación de visibilidad tanto en el aviso como en la salida a WhatsApp. Destino fijo, texto codificado y ninguna confirmación ficticia de mensaje enviado. Las pruebas no abren ni envían mensajes reales.
+
+Límites locales: 10 solicitudes de ingreso cada 15 minutos y 5 registros por hora por dirección. Respuesta 429 con Retry-After; capacidad de contadores acotada. Se cuentan también solicitudes correctas. Los límites se reinician con el proceso y no se comparten entre instancias. El proxy de alojamiento debe sustituir las cabeceras del cliente; requiere verificación en el despliegue.
+
+Producción rechaza modo demo, usuario sa, credenciales vacías, conexión sin cifrado o confianza en certificado sin validar. Redirige HTTP a HTTPS. /salud consulta la base y no expone errores internos. Las pruebas HTTPS usan un servidor de prueba; no prueban el certificado de un alojamiento que aún no existe.
+
+Suite final: 45 pruebas aprobadas, sin omisiones. Persisten como pendientes la verificación del alojamiento, la recuperación de contraseña y la verificación de correo. Las comprobaciones de salud no deben sondear constantemente una base gratuita que deba pausarse.

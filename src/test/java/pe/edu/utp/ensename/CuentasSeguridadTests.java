@@ -95,4 +95,35 @@ class CuentasSeguridadTests {
         mvc.perform(get("/mi-perfil").with(user(correo))).andExpect(content().string(org.hamcrest.Matchers.containsString("&lt;script&gt;")))
             .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("<script>alert(1)</script>"))));
     }
+    @Test void contactoCodificaTextoYCompruebaPublicacionAlSalir() throws Exception {
+        long id = repo.cuenta(correo).orElseThrow().id();
+        repo.guardar(id, "Orientación académica", "51900000001", java.util.Set.of(1), true);
+        repo.activar(id, java.time.Instant.now());
+        mvc.perform(get("/orientadores/" + id + "/contacto"))
+            .andExpect(status().isOk()).andExpect(view().name("contacto"));
+        var resultado = mvc.perform(get("/orientadores/" + id + "/whatsapp"))
+            .andExpect(status().isFound()).andReturn();
+        var uri = java.net.URI.create(resultado.getResponse().getHeader("Location"));
+        assertThat(uri.getScheme()).isEqualTo("https");
+        assertThat(uri.getHost()).isEqualTo("wa.me");
+        assertThat(uri.getPath()).isEqualTo("/51900000001");
+        assertThat(java.net.URLDecoder.decode(uri.getRawQuery(), java.nio.charset.StandardCharsets.UTF_8))
+            .contains("ENSEÑA-ME").contains("orientación académica");
+        repo.guardar(id, "Orientación académica", "51900000001", java.util.Set.of(1), false);
+        mvc.perform(get("/orientadores/" + id + "/whatsapp")).andExpect(status().isNotFound());
+        mvc.perform(get("/orientadores/" + id + "/contacto")).andExpect(status().isNotFound());
+    }
+
+    @Test void contactoNoAceptaNumeroNiDestinoDelVisitante() throws Exception {
+        long id = repo.cuenta(correo).orElseThrow().id();
+        repo.guardar(id, "Orientación", "51900000001", java.util.Set.of(1), true);
+        repo.activar(id, java.time.Instant.now());
+        mvc.perform(get("/orientadores/" + id + "/whatsapp").param("telefono", "51999999999")
+                .param("redirect", "https://otro.invalid"))
+            .andExpect(header().string("Location", org.hamcrest.Matchers.startsWith("https://wa.me/51900000001?text=")));
+        jdbc.update("UPDATE dbo.Suscripcion SET inicio=?,fin=? WHERE usuario_id=?",
+            java.time.OffsetDateTime.parse("2020-01-01T10:00:00-05:00"),
+            java.time.OffsetDateTime.parse("2020-02-01T10:00:00-05:00"),id);
+        mvc.perform(get("/orientadores/" + id + "/contacto")).andExpect(status().isNotFound());
+    }
 }

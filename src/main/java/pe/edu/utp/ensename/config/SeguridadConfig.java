@@ -15,16 +15,21 @@ public class SeguridadConfig {
     @Bean
     SecurityFilterChain seguridad(HttpSecurity http, org.springframework.core.env.Environment environment) throws Exception {
         boolean cuentas = environment.acceptsProfiles(org.springframework.core.env.Profiles.of("sqlserver"));
+        if (environment.acceptsProfiles(org.springframework.core.env.Profiles.of("produccion"))) {
+            http.redirectToHttps(org.springframework.security.config.Customizer.withDefaults());
+        }
         http.authorizeHttpRequests(auth -> {
             if (cuentas) {
                 auth.requestMatchers("/ingresar", "/registro").permitAll()
                     .requestMatchers("/mi-perfil", "/suscripcion", "/suscripcion/activar").authenticated();
             }
             auth
-            .requestMatchers(org.springframework.http.HttpMethod.GET, "/", "/catalogo", "/orientadores/*", "/css/**", "/img/**", "/error").permitAll()
+            .requestMatchers(org.springframework.http.HttpMethod.GET, "/", "/salud", "/catalogo", "/orientadores/*", "/orientadores/*/contacto", "/orientadores/*/whatsapp", "/css/**", "/img/**", "/error").permitAll()
             .anyRequest().denyAll();
         });
         if (cuentas) {
+            http.addFilterBefore(new LimiteAccesosFilter(new LimiteAccesos(clock(), 10000)),
+                org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
             http.formLogin(login -> login.loginPage("/ingresar").usernameParameter("correo")
                     .passwordParameter("clave").defaultSuccessUrl("/mi-perfil", true)
                     .failureUrl("/ingresar?error"))

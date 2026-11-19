@@ -2,11 +2,13 @@
 
 Plataforma de orientación académica entre estudiantes. Una misma cuenta puede buscar ayuda y ofrecer orientación. El catálogo es público; un perfil aparece si está completo, su propietario lo publica y tiene una suscripción mensual simulada vigente.
 
-## Estado al 14 de noviembre de 2026
+## Estado al 18 de noviembre de 2026
 
 Implementados: registro, inicio y cierre de sesión, edición exclusiva del perfil propio, especialidades, activación mensual sin cobro, estado de suscripción, catálogo, filtro y detalle protegido por visibilidad. Persistencia en el esquema SQL Server existente mediante Spring JDBC y consultas parametrizadas. Las contraseñas usan BCrypt. Se conservan las protecciones CSRF y las cabeceras de seguridad.
 
-Pendiente de la siguiente entrega: contacto real por WhatsApp, despliegue, comprobaciones HTTPS y seguridad del alojamiento. No se atribuye un porcentaje académico por contar archivos o pruebas.
+También implementados: aviso y salida a WhatsApp con comprobación de visibilidad, límites de ingreso/registro, endpoint /salud y validación de configuración segura en producción. Las pruebas verifican el destino de WhatsApp sin enviar mensajes.
+
+Pendiente: activar la cuenta de alojamiento, desplegar y comprobar el dominio HTTPS. La semana 15 todavía no se declara cerrada. No se atribuye un porcentaje académico por contar archivos o pruebas.
 
 ## Iniciar con Windows y SQL Server
 
@@ -54,3 +56,12 @@ Usar los perfiles `sqlserver,produccion` y proporcionar DB_URL, DB_USERNAME y DB
 - [Evidencia de seguridad](docs/seguridad.md)
 
 Repositorio: https://github.com/Herbert-GM/Integrador-proyecto. Carpeta activa: C:\Users\Usuario\Documents\ChatGPT\Integrador\ensename. Los antecedentes APF1–APF3 se conservan completos.
+
+
+## Preparar la publicación
+
+```powershell
+.\scripts\Preparar-Despliegue.ps1
+```
+
+Genera `target/despliegue/app.jar`, esquema inicial para una base nueva y variables de ejemplo. El paquete queda también en `target/ensename-despliegue.zip`. Consultar [despliegue en Azure](docs/despliegue.md). La publicación requiere una cuenta activada por el autor; los scripts no crean ni contratan recursos automáticamente.

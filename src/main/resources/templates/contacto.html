@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Contactar · ENSEÑA-ME</title><link rel="stylesheet" href="/css/estilos.css"></head>
+<body>
+<header><a class="marca" href="/">ENSEÑA-ME</a><nav aria-label="Principal"><a href="/catalogo">Explorar orientadores</a></nav></header>
+<main class="cuenta"><section class="panel-cuenta">
+<p class="etiqueta">EL SIGUIENTE PASO ES CONVERSAR</p>
+<h1>Conversa con <span th:text="${orientador.nombre}"></span>.</h1>
+<p>Cuéntale qué tema necesitas comprender. Los horarios y las condiciones se acuerdan entre ustedes.</p>
+<aside class="nota"><p>Vas a salir de ENSEÑA-ME para abrir WhatsApp. No almacenamos los mensajes ni confirmamos que se haya realizado una orientación.</p></aside>
+<a class="boton" th:href="@{/orientadores/{id}/whatsapp(id=${orientador.id})}" target="_blank" rel="noopener noreferrer">Abrir WhatsApp ↗</a>
+<p><a th:href="@{/orientadores/{id}(id=${orientador.id})}">Volver al perfil</a></p>
+</section></main><footer>ENSEÑA-ME · Encuentra orientación. Comparte conocimiento.</footer>
+</body></html>

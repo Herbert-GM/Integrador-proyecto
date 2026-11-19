@@ -71,3 +71,14 @@ El autor autorizó los permisos limitados de la cuenta Windows. No se guarda nin
 El impedimento de acceso descrito al inicio de esta sesión queda resuelto. Próximo trabajo: contacto WhatsApp autorizado y preparación del despliegue, incluida la limitación de intentos de acceso y la revisión de secretos/configuración del alojamiento. No se declara un porcentaje académico sin evaluación del docente.
 
 Validación final de esta entrega: Maven verify con Java 21, 36 pruebas ejecutadas y aprobadas sin omisiones, incluida SQL Server real con rollback; JAR generado. Registro e ingreso revisados visualmente en navegador.
+
+
+## Sesión 2026-11-18 — preparación de semana 15
+
+Se completa el contacto externo con aviso y nueva comprobación de visibilidad al abrir WhatsApp. Se limita el destino a wa.me y se codifica el mensaje. La demo no habilita contactos. Se añaden límites por dirección para ingreso y registro, HTTPS obligatorio en producción, comprobación de conexión cifrada y cuenta limitada al arrancar, y /salud sin detalles internos.
+
+Se prepara el JAR y un paquete con esquema Azure SQL para base nueva, especialidades, ejemplo de variables, instrucciones y huella SHA256. Scripts de preparación y publicación sobre App Service existente. El esquema histórico y la base local se conservan. No se migraron datos a la nube ni se contrató alojamiento.
+
+Validación final: 45 pruebas aprobadas, sin errores ni omisiones; incluye SQL Server real con rollback, contacto seguro, límites y HTTPS. Se generó el paquete Maven. Los scripts de PowerShell pasan el análisis de sintaxis. La publicación remota del script todavía no se ejecutó porque no existe una cuenta Azure activada.
+
+El autor indicó que no dispone de alojamiento. Se propone Azure for Students, sujeto a elegibilidad, disponibilidad y revisión de costes. La activación personal de la cuenta y la comprobación del dominio público quedan pendientes; semana 15 sigue abierta hasta publicar y comprobar el recorrido.
