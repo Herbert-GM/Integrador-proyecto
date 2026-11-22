@@ -1,6 +1,10 @@
 # Publicar ENSEÑA-ME en Render y Neon
 
-El autor autorizó PostgreSQL tras el rechazo de la oferta gratuita de Azure. El código admite PostgreSQL para Render/Neon, SQL Server para el desarrollo previo y el modo demo. No se copiaron datos personales ni cuentas locales a la nube. La aplicación pública sigue pendiente de activar las cuentas del autor y verificar el despliegue.
+El autor autorizó PostgreSQL tras el rechazo de la oferta gratuita de Azure. El código admite PostgreSQL para Render/Neon, SQL Server para el desarrollo previo y el modo demo. No se copiaron datos personales ni cuentas locales a la nube.
+
+El 22 de noviembre de 2026 se publicó [ENSEÑA-ME](https://ensename.onrender.com) mediante el Blueprint del repositorio, en Render Free y Neon Free (Ohio, PostgreSQL 18). La base inicial es `neondb`, con el esquema `dbo`; el usuario de ejecución es `ensename_runtime`, creado por SQL sin pertenencia a `neon_superuser`. Sus credenciales se configuran únicamente en Render. Se verificaron `/salud` disponible, catálogo con las tres especialidades y redirección del perfil privado a ingreso. La prueba completa de registro, publicación y suscripción en la nube queda pendiente de una cuenta del autor.
+
+El rol `ensename_app` creado inicialmente desde la consola no se utiliza en Render: Neon le asignó permisos adicionales y el propietario SQL rechazó tanto retirar la membresía como deshabilitar el inicio de sesión. Su limpieza sigue pendiente mediante la administración de Neon. No usar ese rol para la aplicación.
 
 ## Preparar Neon
 
@@ -18,7 +22,7 @@ El esquema conserva el nombre `dbo` para compartir consultas entre PostgreSQL y 
 1. Crear una cuenta en [Render](https://dashboard.render.com/) y conectar el repositorio `Herbert-GM/Integrador-proyecto`.
 2. Elegir New → Blueprint y seleccionar el repositorio con `render.yaml`, o crear un Web Service con runtime Docker y Dockerfile en la raíz. Confirmar el plan Free antes de crear el servicio.
 3. Configurar las variables requeridas por el Blueprint: DB_URL, DB_USERNAME y DB_PASSWORD. No introducirlas en Git, capturas o mensajes del chat.
-4. DB_USERNAME es `ensename_app`. DB_PASSWORD es la contraseña propia de ese rol. DB_URL sigue este formato, sustituyendo servidor y base:
+4. DB_USERNAME debe coincidir con el rol limitado creado por SQL (`ensename_runtime` en el despliegue actual). DB_PASSWORD es la contraseña propia de ese rol. DB_URL sigue este formato, sustituyendo servidor y base:
 
 ```text
 jdbc:postgresql://ep-del-proyecto-pooler.region.aws.neon.tech/ensename?sslmode=verify-full&sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory
@@ -62,6 +66,6 @@ Para ejecutar la aplicación con la base local de pruebas: `mvnw.cmd spring-boot
 
 Render Free puede suspender la aplicación tras inactividad y tardar en atender la siguiente visita. Neon Free tiene cuotas de almacenamiento y cómputo; comprobar las vigentes en su panel. Si un proveedor solicita un cambio a pago, revisar la decisión con el autor antes de aceptarlo. El límite de intentos de ENSEÑA-ME sigue siendo local por instancia y se restablece al reiniciar.
 
-La oferta gratuita de Render Postgres tiene caducidad; por eso el diseño utiliza una base independiente en Neon. Aún no se han comprobado un dominio público ni las condiciones concretas de las cuentas del autor. La semana 15 continúa abierta hasta publicar y validar ese dominio.
+La oferta gratuita de Render Postgres tiene caducidad; por eso el diseño utiliza una base independiente en Neon. El dominio público ya responde mediante HTTPS; siguen pendientes las pruebas completas con una cuenta del autor antes de cerrar la validación funcional de la entrega.
 
 Referencias oficiales: [Docker en Render](https://render.com/docs/docker), [Blueprints](https://render.com/docs/blueprint-spec), [comprobaciones de salud](https://render.com/docs/health-checks), [límites gratuitos de Render](https://render.com/docs/free), [Neon Free](https://neon.com/blog/neon-free-plan-1-gb-per-project), [TLS en pgJDBC](https://jdbc.postgresql.org/documentation/ssl/).
