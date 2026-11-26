@@ -31,6 +31,7 @@ class ProduccionWebTests {
     @Test void saludHttpsNoExponeDatosDeConexion() throws Exception {
         mvc.perform(get("https://localhost/salud").secure(true)).andExpect(status().isOk())
             .andExpect(content().json("{\"estado\":\"disponible\"}"))
+            .andExpect(header().string("X-Request-ID", org.hamcrest.Matchers.matchesPattern("[0-9a-f-]{36}")))
             .andExpect(header().string("Strict-Transport-Security", containsString("max-age=")));
     }
 }

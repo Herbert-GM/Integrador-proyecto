@@ -8,10 +8,11 @@
 | E02 | SQL Server mediante JDBC, variables de entorno y reutilización del esquema existente | Implementado |
 | E03 | Registro, autenticación, cierre de sesión y validaciones | Implementado |
 | E04 | Edición del perfil propio, especialidades, publicar y ocultar | Implementado |
-| E05 | Activación desde pantalla y estado de suscripción; bloqueo SQL por propietario | Implementado; carga concurrente pendiente |
-| E06 | Contacto WhatsApp autorizado, recorrido integrado y adaptación visual | Pendiente |
+| E05 | Activación desde pantalla y estado de suscripción; bloqueo SQL por propietario | Implementado; concurrencia comprobada en PostgreSQL aislado |
+| E06 | Contacto WhatsApp autorizado, recorrido integrado y adaptación visual | Implementado y recorrido público verificado |
+| E07 | Monitoreo de disponibilidad, errores y tiempos sin datos personales | Implementado; validación local aprobada |
 
-Cada entrega incluye sus pruebas. La activación reutilizará las reglas probadas y deberá impedir periodos duplicados ante solicitudes concurrentes. Se integrará SQL Server antes de crear cuentas reales.
+Cada entrega incluye sus pruebas. La activación vigente no duplica periodos ante solicitudes concurrentes. La persistencia se integró antes de crear cuentas reales; el despliegue actual utiliza PostgreSQL en Neon.
 
 ## Relación con el sílabo
 
@@ -89,3 +90,13 @@ El autor indicó que no dispone de alojamiento. Se propone Azure for Students, s
 El autor autorizó cambiar a PostgreSQL tras el rechazo de Azure gratuito. Se adapta el repositorio, perfiles de cuenta y validación de producción; se conserva SQL Server local. Se preparan esquema/permisos de PostgreSQL, Dockerfile y Blueprint Render Free, sin contraseñas ni datos personales. La imagen usa un usuario sin privilegios. Se añade /vivo sin consulta a base para no mantener Neon activo mediante sondeos. La aplicación pública sigue pendiente de cuentas Neon/Render y verificación del dominio HTTPS.
 
 Validación de la adaptación: 59 pruebas aprobadas sin errores ni omisiones con PostgreSQL real, SQL Server real y concurrencia. La imagen Docker se construyó en Linux y pasó sus pruebas sin bases externas (13 pruebas optativas omitidas allí, ejecutadas en la suite local completa). El contenedor final se conectó a un PostgreSQL 18 privado, mostró registro HTTP 200 y /salud disponible. Se comprobó usuario de proceso sin privilegios. Las bases de pruebas no contienen datos reales. Falta comprobar TLS y el recorrido completo en las cuentas reales de Render y Neon.
+
+## Sesión 2026-11-25 — semana 16
+
+El sílabo pide monitoreo (logs, rendimiento y salud del sistema). Se implementa E07: filtro de producción con estados HTTP, duración, rutas normalizadas e identificador generado por servidor; omisión de datos personales y secretos; distinción de errores, lentitud y límites de acceso. No se exponen nuevas rutas administrativas ni se contratan servicios.
+
+Se añade Comprobar-Monitoreo.ps1 para comprobaciones manuales únicas de /vivo y, opcionalmente, /salud. Rechaza HTML de arranque, guarda solo estado/tiempo/identificador en target y devuelve código de salida para diagnósticos. El plan operativo está junto al código en docs/monitoreo.md; no es otro informe académico.
+
+Validación local: Maven verify correcto, 50 pruebas aprobadas y 13 optativas de bases externas omitidas. Cuatro pruebas nuevas verifican anonimización, error sin detalles, sondeos y HTTP 429; la prueba web de producción comprueba X-Request-ID. Sintaxis PowerShell correcta y comprobación de HTML 200 rechazado frente a JSON saludable. Comprobación puntual del servicio previo a actualizar: /vivo y /salud HTTP 200 y disponibles. No se cambiaron datos ni permisos de la base.
+
+El autor creó su cuenta y guardó su perfil; autorizó su publicación. Se verificaron activación simulada sin cobro, repetición sin extensión, catálogo, detalle y aviso previo a WhatsApp. Quedan para después el selector de país y las tareas de mantenimiento de semana 17. El porcentaje académico corresponde a la evaluación del docente.

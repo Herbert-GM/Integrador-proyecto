@@ -2,13 +2,13 @@
 
 Plataforma de orientación académica entre estudiantes. Una misma cuenta puede buscar ayuda y ofrecer orientación. El catálogo es público; un perfil aparece si está completo, su propietario lo publica y tiene una suscripción mensual simulada vigente.
 
-## Estado al 18 de noviembre de 2026
+## Estado al 25 de noviembre de 2026
 
 Implementados: registro, inicio y cierre de sesión, edición exclusiva del perfil propio, especialidades, activación mensual sin cobro, estado de suscripción, catálogo, filtro y detalle protegido por visibilidad. Persistencia en PostgreSQL para el despliegue y compatibilidad con SQL Server local mediante Spring JDBC y consultas parametrizadas. Las contraseñas usan BCrypt. Se conservan las protecciones CSRF y las cabeceras de seguridad.
 
 También implementados: aviso y salida a WhatsApp con comprobación de visibilidad, límites de ingreso/registro, endpoint /salud y validación de configuración segura en producción. Las pruebas verifican el destino de WhatsApp sin enviar mensajes.
 
-Pendiente: activar la cuenta de alojamiento, desplegar y comprobar el dominio HTTPS. La semana 15 todavía no se declara cerrada. No se atribuye un porcentaje académico por contar archivos o pruebas.
+Publicado en [ensename.onrender.com](https://ensename.onrender.com), con Render Free y Neon. Se verificaron registro, perfil, activación simulada y publicación del autor. La semana 16 incorpora [monitoreo y diagnóstico](docs/monitoreo.md): tiempos y errores sin datos personales, identificador de petición y comprobación manual de disponibilidad. No se atribuye un porcentaje académico por contar archivos o pruebas.
 
 ## Iniciar con Windows y SQL Server
 
@@ -48,13 +48,13 @@ $env:RUN_SQLSERVER_TESTS='true'
 
 ## Despliegue en Render y Neon
 
-Tras el rechazo de la oferta de Azure, el autor autorizó PostgreSQL. La guía vigente es [Render y Neon](docs/render-neon.md). `render.yaml` configura el servicio gratuito y `Dockerfile` compila/prueba en Linux con Java 21. Las cuentas de nube y el dominio público aún están pendientes.
+Tras el rechazo de la oferta de Azure, el autor autorizó PostgreSQL. La guía vigente es [Render y Neon](docs/render-neon.md). `render.yaml` configura el servicio gratuito y `Dockerfile` compila/prueba en Linux con Java 21. El dominio público ya está activo.
 
 Configurar `postgres,produccion` con DB_URL, DB_USERNAME y DB_PASSWORD en Render. La URL PostgreSQL exige `sslmode=verify-full&sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory`. No copiar las credenciales a Git. El esquema nuevo está en `deploy/postgres/001-esquema.sql`; no se migraron cuentas ni datos personales de SQL Server.
 
 ## Alternativa anterior de SQL Server
 
-Usar los perfiles `sqlserver,produccion` y proporcionar DB_URL, DB_USERNAME y DB_PASSWORD mediante el alojamiento. DB_URL debe requerir cifrado y validar el certificado (encrypt=true;trustServerCertificate=false). La autenticación final depende del proveedor; el código de cuentas y las pantallas no cambian. Producción exige HTTPS para las cookies seguras. No se ha desplegado todavía.
+Usar los perfiles `sqlserver,produccion` y proporcionar DB_URL, DB_USERNAME y DB_PASSWORD mediante el alojamiento. DB_URL debe requerir cifrado y validar el certificado (encrypt=true;trustServerCertificate=false). La autenticación final depende del proveedor; el código de cuentas y las pantallas no cambian. Producción exige HTTPS para las cookies seguras. Esta alternativa no es el despliegue público vigente.
 
 - [Objetivo y funciones](docs/producto.md)
 - [Entregas y continuidad](docs/implementacion.md)
