@@ -2,13 +2,15 @@
 
 Plataforma de orientación académica entre estudiantes. Una misma cuenta puede buscar ayuda y ofrecer orientación. El catálogo es público; un perfil aparece si está completo, su propietario lo publica y tiene una suscripción mensual simulada vigente.
 
-## Estado al 25 de noviembre de 2026
+## Estado al 27 de noviembre de 2026
 
 Implementados: registro, inicio y cierre de sesión, edición exclusiva del perfil propio, especialidades, activación mensual sin cobro, estado de suscripción, catálogo, filtro y detalle protegido por visibilidad. Persistencia en PostgreSQL para el despliegue y compatibilidad con SQL Server local mediante Spring JDBC y consultas parametrizadas. Las contraseñas usan BCrypt. Se conservan las protecciones CSRF y las cabeceras de seguridad.
 
 También implementados: aviso y salida a WhatsApp con comprobación de visibilidad, límites de ingreso/registro, endpoint /salud y validación de configuración segura en producción. Las pruebas verifican el destino de WhatsApp sin enviar mensajes.
 
 Publicado en [ensename.onrender.com](https://ensename.onrender.com), con Render Free y Neon. Se verificaron registro, perfil, activación simulada y publicación del autor. La semana 16 incorpora [monitoreo y diagnóstico](docs/monitoreo.md): tiempos y errores sin datos personales, identificador de petición y comprobación manual de disponibilidad. No se atribuye un porcentaje académico por contar archivos o pruebas.
+
+Semana 17: [mantenimiento y recuperación](docs/mantenimiento.md), snapshot de Neon previo a la exposición, exportación local cifrada y restauración probada con datos ficticios. La [guía del 4 de diciembre](docs/exposicion.md) incluye recorrido y alternativa local sin Internet. Para crear el ZIP después de verificar y guardar el código en Git: `scripts/Preparar-Exposicion.ps1`.
 
 ## Iniciar con Windows y SQL Server
 

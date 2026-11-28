@@ -10,7 +10,8 @@
 | E04 | Edición del perfil propio, especialidades, publicar y ocultar | Implementado |
 | E05 | Activación desde pantalla y estado de suscripción; bloqueo SQL por propietario | Implementado; concurrencia comprobada en PostgreSQL aislado |
 | E06 | Contacto WhatsApp autorizado, recorrido integrado y adaptación visual | Implementado y recorrido público verificado |
-| E07 | Monitoreo de disponibilidad, errores y tiempos sin datos personales | Implementado; validación local aprobada |
+| E07 | Monitoreo de disponibilidad, errores y tiempos sin datos personales | Implementado y verificado en Render |
+| E08 | Respaldo, recuperación aislada y alternativa para exposición | Implementado; snapshot verificado y recuperación local probada |
 
 Cada entrega incluye sus pruebas. La activación vigente no duplica periodos ante solicitudes concurrentes. La persistencia se integró antes de crear cuentas reales; el despliegue actual utiliza PostgreSQL en Neon.
 
@@ -100,3 +101,17 @@ Se añade Comprobar-Monitoreo.ps1 para comprobaciones manuales únicas de /vivo 
 Validación local: Maven verify correcto, 50 pruebas aprobadas y 13 optativas de bases externas omitidas. Cuatro pruebas nuevas verifican anonimización, error sin detalles, sondeos y HTTP 429; la prueba web de producción comprueba X-Request-ID. Sintaxis PowerShell correcta y comprobación de HTML 200 rechazado frente a JSON saludable. Comprobación puntual del servicio previo a actualizar: /vivo y /salud HTTP 200 y disponibles. No se cambiaron datos ni permisos de la base.
 
 El autor creó su cuenta y guardó su perfil; autorizó su publicación. Se verificaron activación simulada sin cobro, repetición sin extensión, catálogo, detalle y aviso previo a WhatsApp. Quedan para después el selector de país y las tareas de mantenimiento de semana 17. El porcentaje académico corresponde a la evaluación del docente.
+
+## Sesión 2026-11-27 — mantenimiento y preparación final
+
+Exposición confirmada por el autor para el viernes 4 de diciembre. Se priorizan E08 y estabilidad. No se crea otro informe académico ni se asigna automáticamente 100% por agregar scripts.
+
+Se crea y verifica el snapshot manual ensename-pre-final-20261127 en Neon, de la rama publicada, con vencimiento el 6 de diciembre a medianoche en Lima. No se restaura ni se cambia la base publicada. No había snapshots ni programación de snapshots al iniciar la sesión. No se configura una tarea recurrente ni un proveedor nuevo.
+
+Se añaden exportación con pg_dump custom del esquema dbo, cifrado DPAPI CurrentUser y SHA256; recuperación únicamente a una base nueva en la instancia local aislada; y lanzador/paquete de exposición con demo sin Internet. Las contraseñas de respaldo se solicitan de forma segura y se pasan solo al entorno del proceso hijo. El ZIP se compone mediante lista explícita y excluye datos y respaldos.
+
+Prueba real con datos ficticios: exportación, descifrado y restauración en una base nueva, cinco tablas, conteos 1|1|3|2|1, continuación de la secuencia de usuarios, bloqueo de destino existente y de huella inválida. La restauración del snapshot de Neon sigue sin ejecutarse; no se confunde con esta prueba local. Las bases de ensayo se conservan aisladas para inspección.
+
+Maven verify: 62 pruebas aprobadas, una optativa de SQL Server omitida, cero fallos/errores; incluye PostgreSQL real y concurrencia. Sintaxis de scripts PowerShell correcta. Demo local revisada en navegador: dos perfiles visibles, filtro de Programación devuelve uno, detalle ficticio y contacto desactivado. Se detuvo el servidor de prueba. Aplicación pública comprobada: /vivo y /salud disponibles; la primera conexión a Neon tardó unos diez segundos.
+
+La guía de exposición distingue el producto publicado de la demo local de solo catálogo; esta última no permite cuentas ni contactos. Quedan pendientes el ensayo con tiempo/formato del docente, una revisión cercana al día de exposición, el selector de país opcional y la limpieza del rol inicial no utilizado por un administrador autorizado. No se eliminaron roles ni datos del autor.
