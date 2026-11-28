@@ -16,7 +16,7 @@ public class ConfiguracionProduccion {
     public static void validar(Environment environment) {
         boolean postgres = environment.acceptsProfiles(Profiles.of("postgres"));
         boolean sqlserver = environment.acceptsProfiles(Profiles.of("sqlserver"));
-        if (postgres == sqlserver || environment.acceptsProfiles(Profiles.of("demo"))) {
+        if (postgres == sqlserver || environment.acceptsProfiles(Profiles.of("demo", "exposicion"))) {
             throw new IllegalStateException("Producción requiere exactamente un perfil de base de datos y no permite demo.");
         }
         String url = environment.getProperty("DB_URL", "");

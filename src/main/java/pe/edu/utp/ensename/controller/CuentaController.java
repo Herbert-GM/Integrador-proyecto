@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import pe.edu.utp.ensename.repository.CuentaRepository;
+import pe.edu.utp.ensename.model.PaisTelefono;
 
 @Controller @Profile({"sqlserver", "postgres"})
 public class CuentaController {
@@ -28,6 +29,8 @@ public class CuentaController {
         public String getClave(){return clave;} public void setClave(String v){clave=v;}
     }
     public static class Perfil {
+        public String pais;
+        public String getPais(){return pais;} public void setPais(String v){pais=v;}
         @NotBlank @Size(max=1000) public String descripcion;
         @Pattern(regexp="[1-9][0-9]{7,14}") @NotBlank public String telefono;
         @NotEmpty @Size(max=20) public Set<Integer> especialidades=new HashSet<>();
@@ -47,8 +50,17 @@ public class CuentaController {
         return "redirect:/ingresar?registrado";
     }
     private CuentaRepository.Cuenta propia(Principal p){return repo.cuenta(p.getName()).filter(CuentaRepository.Cuenta::habilitado).orElseThrow(()->new ResponseStatusException(HttpStatus.FORBIDDEN));}
-    @GetMapping("/mi-perfil") String perfil(Principal p,Model m){var c=propia(p);var o=repo.buscarPorId(c.id()).orElseThrow();var f=new Perfil();f.descripcion=o.descripcion();f.telefono=o.whatsapp();f.publicar=o.publicar();f.especialidades=repo.seleccionadas(c.id());m.addAttribute("perfil",f);m.addAttribute("especialidades",repo.especialidades());return "mi-perfil";}
-    @PostMapping("/mi-perfil") String guardar(Principal p,@Valid @ModelAttribute("perfil") Perfil f,BindingResult errores,Model m){var c=propia(p);var permitidas=repo.especialidades();if(f.especialidades!=null&&!permitidas.stream().map(CuentaRepository.EspecialidadDato::id).toList().containsAll(f.especialidades))errores.rejectValue("especialidades","invalida","Especialidad no válida.");if(errores.hasErrors()){m.addAttribute("especialidades",permitidas);return "mi-perfil";}repo.guardar(c.id(),f.descripcion.strip(),f.telefono,f.especialidades,f.publicar);return "redirect:/mi-perfil?guardado";}
+    @ModelAttribute("paisesTelefono") public PaisTelefono[] paises(){return PaisTelefono.values();}
+    @GetMapping("/mi-perfil") String perfil(Principal p,Model m){var c=propia(p);var o=repo.buscarPorId(c.id()).orElseThrow();var f=new Perfil();f.descripcion=o.descripcion();var numero=PaisTelefono.separar(o.whatsapp());f.pais=numero.pais().name();f.telefono=numero.numero();f.publicar=o.publicar();f.especialidades=repo.seleccionadas(c.id());m.addAttribute("perfil",f);m.addAttribute("especialidades",repo.especialidades());return "mi-perfil";}
+    @PostMapping("/mi-perfil") String guardar(Principal p,@Valid @ModelAttribute("perfil") Perfil f,BindingResult errores,Model m){
+        var c=propia(p);var permitidas=repo.especialidades();
+        if(f.especialidades!=null&&!permitidas.stream().map(CuentaRepository.EspecialidadDato::id).toList().containsAll(f.especialidades))errores.rejectValue("especialidades","invalida","Especialidad no válida.");
+        String internacional=f.telefono;
+        try { if(f.pais!=null&&!f.pais.isBlank())internacional=PaisTelefono.valueOf(f.pais).internacional(f.telefono); }
+        catch(IllegalArgumentException e){errores.rejectValue("telefono","pais","Revisa el país y la cantidad de dígitos; escribe el número sin prefijo ni +. Para otro país utiliza el formato internacional completo.");}
+        if(errores.hasErrors()){m.addAttribute("especialidades",permitidas);return "mi-perfil";}
+        repo.guardar(c.id(),f.descripcion.strip(),internacional,f.especialidades,f.publicar);return "redirect:/mi-perfil?guardado";
+    }
     @GetMapping("/suscripcion") String suscripcion(Principal p,Model m){var s=repo.suscripcion(propia(p).id());m.addAttribute("suscripcion",s);m.addAttribute("vigente",s!=null&&s.vigenteEn(clock.instant()));return "suscripcion";}
     @PostMapping("/suscripcion/activar") String activar(Principal p){repo.activar(propia(p).id(),clock.instant());return "redirect:/suscripcion?activada";}
 }

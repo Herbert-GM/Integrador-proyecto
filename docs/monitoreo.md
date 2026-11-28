@@ -42,6 +42,6 @@ Si una actualización falla, Render conserva la versión anterior hasta que la n
 
 En el recorrido de producción del 25 de noviembre se verificaron registro del autor, guardado del perfil, activación mensual simulada, repetición sin extensión de vigencia, publicación en catálogo, detalle y pantalla previa a WhatsApp. No se enviaron mensajes. No se ocultó el perfil del autor ni se alteró su fecha de vencimiento para probar casos destructivos; esas reglas permanecen cubiertas por pruebas aisladas.
 
-Pendiente operativo: el rol inicial `ensename_app` de consola sigue sin utilizarse y requiere limpieza desde la administración de Neon. La aplicación usa `ensename_runtime`, sin membresía administrativa. El selector de país queda para una entrega posterior.
+Pendiente operativo: el rol inicial `ensename_app` de consola sigue sin utilizarse y requiere limpieza desde la administración de Neon. La aplicación usa `ensename_runtime`, sin membresía administrativa. El selector de país está implementado; el entorno de ejemplos se describe en la guía de exposición.
 
 Referencias: [comprobaciones de salud de Render](https://render.com/docs/health-checks) y [OncePerRequestFilter de Spring](https://docs.spring.io/spring-framework/docs/6.2.x/javadoc-api/org/springframework/web/filter/OncePerRequestFilter.html).

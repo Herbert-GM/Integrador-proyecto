@@ -1,6 +1,6 @@
-param([string]$PgBin = 'C:\Program Files\PostgreSQL\18\bin')
+param([string]$PgBin = 'C:\Program Files\PostgreSQL\18\bin', [string]$DirectorioProyecto = (Split-Path $PSScriptRoot -Parent))
 $ErrorActionPreference = 'Stop'
-$proyecto = Split-Path $PSScriptRoot -Parent
+$proyecto = [IO.Path]::GetFullPath($DirectorioProyecto)
 $datos = Join-Path $proyecto '.local\postgres-test'
 $psql = Join-Path $PgBin 'psql.exe'
 if (-not (Test-Path -LiteralPath $psql)) { throw 'Indica la carpeta bin de PostgreSQL con -PgBin.' }

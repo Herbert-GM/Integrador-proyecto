@@ -6,4 +6,6 @@ public class EstadoInterfaz {
  private final Environment environment;
  public EstadoInterfaz(Environment environment){this.environment=environment;}
  @ModelAttribute("cuentasDisponibles") public boolean cuentas(){return environment.acceptsProfiles(Profiles.of("sqlserver", "postgres"));}
+ @ModelAttribute("esDemostracion") public boolean demostracion(){return environment.acceptsProfiles(Profiles.of("demo", "exposicion"));}
+ @ModelAttribute("contactosDisponibles") public boolean contactos(){return cuentas()&&!demostracion();}
 }

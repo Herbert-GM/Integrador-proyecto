@@ -19,11 +19,15 @@ import pe.edu.utp.ensename.service.CatalogoService;
 public class ContactoController {
     private final CatalogoService catalogo;
 
-    public ContactoController(CatalogoService catalogo) {
+    private final org.springframework.core.env.Environment environment;
+    public ContactoController(CatalogoService catalogo, org.springframework.core.env.Environment environment) {
         this.catalogo = catalogo;
+        this.environment = environment;
     }
 
     private Orientador visible(long id) {
+        if(environment.acceptsProfiles(org.springframework.core.env.Profiles.of("exposicion")))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return catalogo.detalleVisible(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }

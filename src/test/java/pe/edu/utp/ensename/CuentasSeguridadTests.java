@@ -114,6 +114,17 @@ class CuentasSeguridadTests {
         mvc.perform(get("/orientadores/" + id + "/contacto")).andExpect(status().isNotFound());
     }
 
+    @Test void paisComponeTelefonoYNoDuplicaPrefijoAlEditar() throws Exception {
+        long id=repo.cuenta(correo).orElseThrow().id();
+        mvc.perform(post("/mi-perfil").with(user(correo)).with(csrf()).param("descripcion","Ensayo").param("pais","PE").param("telefono","900000001").param("especialidades","1"))
+            .andExpect(redirectedUrl("/mi-perfil?guardado"));
+        assertThat(repo.buscarPorId(id).orElseThrow().whatsapp()).isEqualTo("51900000001");
+        mvc.perform(get("/mi-perfil").with(user(correo))).andExpect(model().attributeExists("paisesTelefono"))
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("value=\"900000001\"")));
+        for(String pais:new String[]{"PE","INVALIDO"})mvc.perform(post("/mi-perfil").with(user(correo)).with(csrf()).param("descripcion","Ensayo").param("pais",pais).param("telefono","51900000001").param("especialidades","1"))
+            .andExpect(view().name("mi-perfil"));
+        assertThat(repo.buscarPorId(id).orElseThrow().whatsapp()).isEqualTo("51900000001");
+    }
     @Test void contactoNoAceptaNumeroNiDestinoDelVisitante() throws Exception {
         long id = repo.cuenta(correo).orElseThrow().id();
         repo.guardar(id, "Orientación", "51900000001", java.util.Set.of(1), true);

@@ -16,13 +16,13 @@ class CatalogoServiceTests {
 
     @Test void catalogoYDetalleCompartenReglaDeVisibilidad() {
         var service = new CatalogoService(new DemoOrientadorRepository(clock), clock);
-        assertThat(service.buscar(null)).extracting(Orientador::id).containsExactly(1L, 2L);
+        assertThat(service.buscar(null)).extracting(Orientador::id).containsExactlyInAnyOrder(1L, 2L, 6L, 7L, 8L, 9L, 10L, 11L);
         for (long id : new long[]{3, 4, 5, 999}) assertThat(service.detalleVisible(id)).isEmpty();
     }
-    @Test void filtraPorEspecialidadYDevuelveVacioSinCoincidencias() {
+    @Test void filtraPorEspecialidadSinMezclarTemas() {
         var service = new CatalogoService(new DemoOrientadorRepository(clock), clock);
-        assertThat(service.buscar(Especialidad.PROGRAMACION)).extracting(Orientador::id).containsExactly(1L);
-        assertThat(service.buscar(Especialidad.BASES_DE_DATOS)).isEmpty();
+        assertThat(service.buscar(Especialidad.PROGRAMACION)).extracting(Orientador::id).containsExactlyInAnyOrder(1L,7L,9L,10L);
+        assertThat(service.buscar(Especialidad.BASES_DE_DATOS)).extracting(Orientador::id).containsExactlyInAnyOrder(6L,9L,11L);
     }
     @Test void vencimientoOcultaTambienElDetalleSinReiniciarRepositorio() {
         var repo = new DemoOrientadorRepository(clock);

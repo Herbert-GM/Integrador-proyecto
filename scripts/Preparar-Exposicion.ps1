@@ -14,9 +14,13 @@ try {
     New-Item -ItemType Directory -Path $destino | Out-Null
     Copy-Item -LiteralPath $jar -Destination (Join-Path $destino 'app.jar')
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Iniciar-DemoExposicion.ps1') -Destination $destino
+    foreach($script in @('Iniciar-PostgresPruebas.ps1','Postgres-Mantenimiento.ps1')){Copy-Item -LiteralPath (Join-Path $PSScriptRoot $script) -Destination $destino}
+    $esquema=Join-Path $destino 'deploy/postgres'
+    New-Item -ItemType Directory -Path $esquema -Force | Out-Null
+    Copy-Item -LiteralPath 'deploy/postgres/001-esquema.sql' -Destination $esquema
     Copy-Item -LiteralPath 'docs/exposicion.md' -Destination (Join-Path $destino 'LEEME.md')
-    $archivos = Get-ChildItem -LiteralPath $destino -File | ForEach-Object {
-        [pscustomobject]@{ archivo=$_.Name; sha256=(Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash }
+    $archivos = Get-ChildItem -LiteralPath $destino -File -Recurse | ForEach-Object {
+        [pscustomobject]@{ archivo=[IO.Path]::GetRelativePath($destino,$_.FullName); sha256=(Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash }
     }
     [pscustomobject]@{ commit=$version.Trim(); creado_utc=[DateTimeOffset]::UtcNow.ToString('o'); archivos=@($archivos) } |
         ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $destino 'manifest.json') -Encoding utf8

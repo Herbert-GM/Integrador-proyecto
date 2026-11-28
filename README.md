@@ -10,7 +10,9 @@ También implementados: aviso y salida a WhatsApp con comprobación de visibilid
 
 Publicado en [ensename.onrender.com](https://ensename.onrender.com), con Render Free y Neon. Se verificaron registro, perfil, activación simulada y publicación del autor. La semana 16 incorpora [monitoreo y diagnóstico](docs/monitoreo.md): tiempos y errores sin datos personales, identificador de petición y comprobación manual de disponibilidad. No se atribuye un porcentaje académico por contar archivos o pruebas.
 
-Semana 17: [mantenimiento y recuperación](docs/mantenimiento.md), snapshot de Neon previo a la exposición, exportación local cifrada y restauración probada con datos ficticios. La [guía del 4 de diciembre](docs/exposicion.md) incluye recorrido y alternativa local sin Internet. Para crear el ZIP después de verificar y guardar el código en Git: `scripts/Preparar-Exposicion.ps1`.
+Semana 17: [mantenimiento y recuperación](docs/mantenimiento.md), snapshot de Neon previo a la exposición, exportación local cifrada y restauración probada con datos ficticios. La [guía del 4 de diciembre](docs/exposicion.md) incluye ocho perfiles visibles, tres casos no visibles y un ensayo completo con cuenta local mediante `scripts/Iniciar-DemoExposicion.ps1 -ConCuenta` (PostgreSQL 18). El modo de lectura sigue disponible sin base. Para crear el ZIP después de verificar y guardar el código en Git: `scripts/Preparar-Exposicion.ps1`.
+
+El perfil permite elegir Perú, Colombia o Chile y escribir solo el número nacional; el servidor agrega el prefijo. Para otros países se conserva la entrada internacional completa. Los teléfonos existentes se separan al editar y mantienen su valor al guardar sin cambios; no se realiza una migración de datos.
 
 ## Iniciar con Windows y SQL Server
 

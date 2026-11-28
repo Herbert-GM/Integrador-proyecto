@@ -45,7 +45,21 @@ Desde el repositorio:
 
 Desde el ZIP descomprimido, ejecutar el mismo script que está junto a `app.jar`. Abrir `http://127.0.0.1:8090`; Ctrl+C detiene la demo. No necesita Maven, Internet, SQL Server ni Neon durante su ejecución. Sí necesita Java 21 instalado.
 
-Esta alternativa muestra cinco perfiles ficticios y permite demostrar catálogo, filtros y visibilidad. **No contiene cuentas reales, registro/inicio de sesión ni contacto activo.** No presentarla como una copia completa de la base publicada. El recorrido de cuentas se explica con las pruebas aisladas y la validación previa.
+La demo de lectura muestra ocho perfiles visibles de once ejemplos ficticios y permite demostrar catálogo, filtros y visibilidad. No tiene cuentas. Para ensayar también perfil y suscripción, usar la modalidad con cuenta:
+
+```powershell
+.\scripts\Iniciar-DemoExposicion.ps1 -ConCuenta -JavaHome 'C:\Program Files\Eclipse Adoptium\jdk-21.0.6.7-hotspot'
+```
+
+Esta modalidad necesita **PostgreSQL 18 y PowerShell 7 instalados previamente**, pero no Internet durante el ensayo. Prepara una instancia local aislada y una base independiente llamada `ensename_exposicion`. En el ZIP, scripts y esquema están incluidos. La aplicación solo escucha en 127.0.0.1 y rechaza combinar `exposicion` con `produccion`.
+
+Cuenta pública de ensayo, exclusivamente local: **`orientador@demo.invalid` / `Demostracion 2026!`**. Corresponde a Paula y empieza con una suscripción vencida. Puedes editar su perfil y activar el mes simulado para mostrar cómo aparece en el catálogo. Los cambios se conservan al reiniciar; no se restablecen ni se renuevan suscripciones automáticamente. En ambos modos WhatsApp permanece bloqueado, incluso por URL directa. Nunca usar estas credenciales en la página publicada.
+
+Los ocho perfiles inicialmente visibles son Ana, Andrés, Camila, Diego, Luis, Mateo, Sofía y Valeria. Paula tiene suscripción vencida, el perfil oculto no tiene publicación habilitada y el incompleto carece de descripción, especialidades y teléfono. Estos tres no se muestran inicialmente. Sus nombres/descripciones son ficticios, no testimonios ni competencias verificadas.
+
+Secuencia breve de ensayo con cuenta: filtrar Bases de datos, entrar como Paula, revisar que no tiene suscripción vigente, editar la descripción si se desea y activar el mes simulado. Al volver al catálogo pasa de ocho a nueve perfiles. No abrir contactos: están bloqueados en este entorno. Para mostrar ocultamiento, desmarcar publicación en el perfil propio y guardarlo; volver a marcarla para recuperar visibilidad. Estos cambios afectan solo los ejemplos locales.
+
+Selector telefónico: Perú (+51), Colombia (+57), Chile (+56) y entrada internacional manual para otros países. El prefijo se agrega en el servidor, no se escribe dos veces en el campo. Fuente de indicativos: [planes nacionales de numeración de la UIT](https://www.itu.int/oth/T0202.aspx?lang=es&parent=T0202).
 
 Para crear el ZIP desde un árbol Git limpio después de ejecutar Maven verify:
 
@@ -53,7 +67,7 @@ Para crear el ZIP desde un árbol Git limpio después de ejecutar Maven verify:
 .\scripts\Preparar-Exposicion.ps1
 ```
 
-El paquete queda en `target/exposicion-*.zip` y contiene el JAR, el lanzador, esta guía y un manifiesto de commit/SHA256. No lleva `.env`, respaldos, contraseñas ni datos de cuentas reales. El manifiesto identifica los archivos; no reemplaza las pruebas ni una firma digital.
+El paquete queda en `target/exposicion-*.zip` y contiene el JAR, lanzadores, esquema inicial, esta guía y un manifiesto de commit/SHA256. No lleva `.env`, respaldos, contraseñas privadas ni datos de cuentas reales; únicamente las credenciales públicas del entorno ficticio. El manifiesto identifica los archivos; no reemplaza las pruebas ni una firma digital.
 
 ## Comprobación final el día anterior
 

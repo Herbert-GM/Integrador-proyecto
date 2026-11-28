@@ -35,9 +35,10 @@ class EnsenameApplicationTests {
             mvc.perform(get("/orientadores/" + id)).andExpect(status().isNotFound());
         }
     }
-    @Test void filtroSinResultadosTieneMensaje() throws Exception {
+    @Test void filtroDeDatosMuestraEjemplosDelTema() throws Exception {
         mvc.perform(get("/catalogo").param("especialidad", "BASES_DE_DATOS"))
-            .andExpect(status().isOk()).andExpect(content().string(containsString("Aún no hay perfiles disponibles")));
+            .andExpect(status().isOk()).andExpect(content().string(containsString("Valeria · perfil de ejemplo")))
+            .andExpect(content().string(not(containsString("Ana · perfil de ejemplo"))));
     }
     @Test void filtroDesconocidoSeRechaza() throws Exception {
         mvc.perform(get("/catalogo").param("especialidad", "INVALIDA")).andExpect(status().isBadRequest());
