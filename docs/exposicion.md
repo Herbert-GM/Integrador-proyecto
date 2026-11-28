@@ -11,7 +11,20 @@ Guía operativa del proyecto, sin generar otro informe académico.
 - Preparar el JAR y probar la alternativa local antes de salir. Tener Java 21 y el ZIP descomprimido.
 - Abrir únicamente pestañas necesarias. Mantener cerrados contraseñas, variables privadas de Render y gestores de credenciales al compartir pantalla.
 
-## Recorrido sugerido (8–10 minutos, ajustar al tiempo del docente)
+## Recorrido provisional de 10 minutos
+
+El autor estima diez minutos; confirmar el límite con el docente. Si las preguntas son aparte, usar el último minuto para resumir resultados.
+
+| Tiempo | Qué mostrar |
+| --- | --- |
+| 0:00–1:00 | Problema, objetivo y quién utiliza ENSEÑA-ME |
+| 1:00–4:00 | Catálogo, filtro, detalle, aviso de contacto, perfil y suscripción |
+| 4:00–6:00 | Arquitectura y decisiones de seguridad |
+| 6:00–8:00 | Pruebas, monitoreo, respaldo y recuperación aislada |
+| 8:00–9:00 | Resultado, alcance y límites |
+| 9:00–10:00 | Preguntas o margen por una carga lenta |
+
+Llegar con la sesión propia iniciada para el recorrido; no gastar tiempo creando otra cuenta ni escribiendo contraseñas ante el público. Mostrar una especialidad en el filtro y un único perfil es suficiente.
 
 1. **Problema y objetivo:** estudiantes encuentran orientación de otros estudiantes y coordinan externamente. No se certifican competencias.
 2. **Visitante:** inicio, catálogo, filtro por especialidad, detalle y aviso previo a WhatsApp. Detenerse antes de enviar cualquier mensaje.
